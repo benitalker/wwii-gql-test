@@ -1,8 +1,12 @@
+from dataclasses import field
+
 from graphene import ObjectType, List, Field, Int, Date, String
 
 from app.gql.tyeps import MissionType, LimitedMissionType
+from app.gql.tyeps.mission_statistic_type import MissionStatisticsType
 from app.repository.mission_repository import get_all_missions, get_mission_by_id, get_missions_in_date_range, \
-    get_missions_by_county_name, get_missions_by_target_industry, get_missions_by_target_type
+    get_missions_by_county_name, get_missions_by_target_industry, get_missions_by_target_type, \
+    get_mission_statistics_for_city
 
 
 class Query(ObjectType):
@@ -12,6 +16,7 @@ class Query(ObjectType):
     get_missions_by_county_name = List(MissionType,country_name=String(required=True))
     get_missions_by_target_industry = List(MissionType,target_industry=String(required=True))
     get_missions_by_target_type = List(LimitedMissionType,target_type=String(required=True))
+    get_mission_statistics_for_city = Field(MissionStatisticsType, city_name=String(required=True))
 
     @staticmethod
     def resolve_get_all_missions(root, info):
@@ -36,3 +41,7 @@ class Query(ObjectType):
     @staticmethod
     def resolve_get_missions_by_target_type(root,info,target_type):
         return get_missions_by_target_type(target_type)
+
+    @staticmethod
+    def resolve_get_mission_statistics_for_city(root,info,city_name):
+        return get_mission_statistics_for_city(city_name)

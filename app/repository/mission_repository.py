@@ -1,6 +1,7 @@
 from typing import List
 from app.db.database import session_maker
 from app.db.models import Mission, Target, City, Country, TargetType
+from sqlalchemy import func
 
 def get_all_missions() -> List[Mission]:
     with session_maker() as session:
@@ -68,3 +69,33 @@ def delete_mission(mission_id):
 
         session.delete(mission)
         session.commit()
+
+
+from sqlalchemy.sql import func
+
+
+def get_mission_statistics_for_city(city_name):
+    with session_maker() as session:
+        city_stat_query = (session.query(Mission)
+                           .join(Mission.targets)
+                           .join(Target.city)
+                           .filter(City.city_name == city_name))
+
+        city_stat = city_stat_query.all()
+
+        if not city_stat:
+            raise ValueError(f"No statistics found for city: {city_name}")
+
+        total_missions = len(city_stat)
+
+        avg_priority_query = (session.query(func.avg(Target.target_priority))
+                              .join(Mission)
+                              .join(City)
+                              .filter(City.city_name == city_name)
+                              .scalar())
+
+        return {
+            'missions': city_stat,
+            'total_missions': total_missions,
+            'average_target_priority': avg_priority_query
+        }
