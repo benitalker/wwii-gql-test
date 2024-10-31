@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DECIMAL
 from sqlalchemy.orm import relationship
-
-from app.db.database import Base
+from app.db.models import Base
 
 
 class City(Base):
