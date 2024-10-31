@@ -23,5 +23,9 @@ def get_missions_by_county_name(country_name):
         .join(Target.city)
         .join(City.country).filter(Country.country_name == country_name).all())
 
-
+def get_missions_by_target_industry(target_industry):
+    with session_maker() as session:
+        return (session.query(Mission)
+        .join(Mission.targets)
+        .filter(Target.target_industry == target_industry).all())
 
