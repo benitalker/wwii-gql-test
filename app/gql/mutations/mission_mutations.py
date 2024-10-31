@@ -15,8 +15,6 @@ class AddMission(Mutation):
 
         return AddMission(mission=new_mission, ok=True)
 
-
-
 class UpdateMission(Mutation):
     class Arguments:
         mission_id = Int(required=True)

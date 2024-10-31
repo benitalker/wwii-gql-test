@@ -52,6 +52,7 @@ def update_mission_by_id(mission_id, attack_result_data):
             setattr(attack_result, key, value)
 
         session.commit()
+        session.refresh(attack_result)
         return attack_result
 
 def delete_mission(mission_id):
