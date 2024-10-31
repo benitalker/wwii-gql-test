@@ -1,4 +1,5 @@
-from graphene import ObjectType, Int, Date, String
+from graphene import ObjectType, Int
+from graphene.types.datetime import Date
 
 class MissionType(ObjectType):
     mission_id = Int()
