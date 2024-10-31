@@ -1,7 +1,6 @@
 from typing import List
-from sqlalchemy import func
 from app.db.database import session_maker
-from app.db.models import Mission, Target, City, Country
+from app.db.models import Mission, Target, City, Country, TargetType
 
 
 def get_all_missions() -> List[Mission]:
@@ -29,3 +28,24 @@ def get_missions_by_target_industry(target_industry):
         .join(Mission.targets)
         .filter(Target.target_industry == target_industry).all())
 
+def get_missions_by_target_type(target_type):
+    with session_maker() as session:
+        return (session.query(Mission)
+                .join(Mission.targets)
+                .join(Target.target_type)
+                .filter(TargetType.target_type_name == target_type).all())
+#
+# def get_missions_by_target_type(target_type_name):
+#     with session_maker() as session:
+#         return (
+#             session.query(
+#                 Mission.aircraft_returned,
+#                 Mission.aircraft_failed,
+#                 Mission.aircraft_damaged,
+#                 Mission.aircraft_lost
+#             )
+#             .join(Mission.targets)  # Join with targets related to the mission
+#             .join(Target.target_type)  # Join target's type
+#             .filter(TargetType.target_type_name == target_type_name)  # Filter by target type name
+#             .all()
+#         )
