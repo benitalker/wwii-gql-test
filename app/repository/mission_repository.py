@@ -2,14 +2,16 @@ from typing import List
 from app.db.database import session_maker
 from app.db.models import Mission, Target, City, Country, TargetType
 
-
 def get_all_missions() -> List[Mission]:
     with session_maker() as session:
         return session.query(Mission).all()
 
 def get_mission_by_id(mission_id) -> Mission:
     with session_maker() as session:
-        return session.query(Mission).filter(Mission.mission_id == mission_id).first()
+        mission =  session.query(Mission).filter(Mission.mission_id == mission_id).first()
+        if not mission:
+            raise Exception("Mission result not found")
+        return mission
 
 def get_missions_in_date_range(start_date,end_date) -> List[Mission]:
     with session_maker() as session:
