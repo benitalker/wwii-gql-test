@@ -6,4 +6,4 @@ class Mutation(ObjectType):
     add_new_mission = AddMission.Field()
     add_new_target = AddTarget.Field()
     update_mission = UpdateMission.Field()
-    # delete_mission = DeleteMission.Field()
+    delete_mission = DeleteMission.Field()
